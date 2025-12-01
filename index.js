@@ -12,24 +12,73 @@ const formElement = document.querySelector(".to-do__form");
 const inputElement = document.querySelector(".to-do__input");
 
 function loadTasks() {
-
+  const loadedItems = JSON.parse(localStorage.getItem('tasks'));
+  if (loadedItems.length !== 0) {
+    return loadedItems;
+  }
+  else {
+    return items;
+  }
 }
 
 function createItem(item) {
 	const template = document.getElementById("to-do__item-template");
-	const clone = template.content.querySelector(".to-do__item").cloneNode(true);
+  const clone = template.content.querySelector(".to-do__item").cloneNode(true);
   const textElement = clone.querySelector(".to-do__item-text");
   const deleteButton = clone.querySelector(".to-do__item-button_type_delete");
   const duplicateButton = clone.querySelector(".to-do__item-button_type_duplicate");
   const editButton = clone.querySelector(".to-do__item-button_type_edit");
 
+  textElement.textContent = item
+  deleteButton.addEventListener('click', function(evt) {
+    clone.remove();
+    items = getTasksFromDOM();
+    saveTasks(items);
+  })
+  duplicateButton.addEventListener('click', function(evt) {
+    itemName = textElement.textContent;
+    newItem = createItem(itemName);
+    listElement.prepend(newItem);
+    items = getTasksFromDOM();
+    saveTasks(items);
+  })
+  editButton.addEventListener('click', function(evt) {
+    textElement.setAttribute('contenteditable','true')
+    textElement.focus();
+  })
+  textElement.addEventListener('blur', function(evt) {
+    textElement.setAttribute('contenteditable','false')
+    items = getTasksFromDOM();
+    saveTasks(items);
+  })
+  return clone;
 }
 
 function getTasksFromDOM() {
-
+  const itemsNamesElements = document.querySelectorAll('.to-do__item');
+  const tasks = [];
+  itemsNamesElements.forEach(
+    (item) => tasks.push(item.textContent)
+  );
+  return tasks;
 }
 
 function saveTasks(tasks) {
-
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
+items = loadTasks();
+
+items.forEach(
+  (item) => listElement.append(createItem(item))
+)
+
+formElement.addEventListener('submit', function(evt) {
+  evt.preventDefault();
+  if (inputElement.value){
+    listElement.append(createItem(inputElement.value));
+    items = getTasksFromDOM();
+    saveTasks(items);
+    formElement.reset();
+  }
+})
