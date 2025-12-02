@@ -60,6 +60,7 @@ function getTasksFromDOM() {
   itemsNamesElements.forEach(
     (item) => tasks.push(item.textContent)
   );
+  return tasks;
 }
 
 function saveTasks(tasks) {
