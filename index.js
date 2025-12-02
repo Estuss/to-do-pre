@@ -13,7 +13,7 @@ const inputElement = document.querySelector(".to-do__input");
 
 function loadTasks() {
   const loadedItems = JSON.parse(localStorage.getItem('tasks'));
-  if (loadedItems.length !== 0) {
+  if (loadedItems && loadedItems.length > 0) {
     return loadedItems;
   }
   else {
@@ -60,7 +60,6 @@ function getTasksFromDOM() {
   itemsNamesElements.forEach(
     (item) => tasks.push(item.textContent)
   );
-  return tasks;
 }
 
 function saveTasks(tasks) {
