@@ -30,32 +30,32 @@ function createItem(item) {
   const editButton = clone.querySelector(".to-do__item-button_type_edit");
 
   textElement.textContent = item
-  deleteButton.addEventListener('click', function(evt) {
+  deleteButton.addEventListener('click', function() {
     clone.remove();
-    items = getTasksFromDOM();
+    const items = getTasksFromDOM();
     saveTasks(items);
   })
-  duplicateButton.addEventListener('click', function(evt) {
-    itemName = textElement.textContent;
-    newItem = createItem(itemName);
+  duplicateButton.addEventListener('click', function() {
+    const itemName = textElement.textContent;
+    const newItem = createItem(itemName);
     listElement.prepend(newItem);
-    items = getTasksFromDOM();
+    const items = getTasksFromDOM();
     saveTasks(items);
   })
-  editButton.addEventListener('click', function(evt) {
+  editButton.addEventListener('click', function() {
     textElement.setAttribute('contenteditable','true')
     textElement.focus();
   })
-  textElement.addEventListener('blur', function(evt) {
+  textElement.addEventListener('blur', function() {
     textElement.setAttribute('contenteditable','false')
-    items = getTasksFromDOM();
+    const items = getTasksFromDOM();
     saveTasks(items);
   })
   return clone;
 }
 
 function getTasksFromDOM() {
-  const itemsNamesElements = document.querySelectorAll('.to-do__item');
+  const itemsNamesElements = document.querySelectorAll('.to-do__item-text');
   const tasks = [];
   itemsNamesElements.forEach(
     (item) => tasks.push(item.textContent)
